@@ -1,0 +1,17 @@
+% A collection of commonly used LaTeX macros for general use.
+
+%\NeedsTeXFormat{LaTeX2e}[2005/12/01]
+\ProvidesPackage{shmacro}
+
+% Print TODO note.
+%
+% #1 text (no paragraph breaks)
+%
+\newcommand*{\TODO}[1]
+  {%
+    \ifdefined\color
+      {\color{red}[#1]}%
+    \else
+      {\emph{[#1]}}%
+    \fi
+  }
