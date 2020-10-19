@@ -1,10 +1,10 @@
-# LaTeX auxiliary files
+# Auxiliary files
 *.aux
 *.log
 
-# Typeset document files
+# Typeset files
 *.dvi
 *.pdf
 
-# Demo source file
+# Demo file
 demo.tex
