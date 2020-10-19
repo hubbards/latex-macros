@@ -1,17 +1,73 @@
-% A collection of commonly used LaTeX macros for general use.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{shmacro}[2020/11/06 My macros for general use]
 
-%\NeedsTeXFormat{LaTeX2e}[2005/12/01]
-\ProvidesPackage{shmacro}
+% Macros are formatted for readability; TeX's reading rules, p. 46 and p. 47 of
+% The TEXbook, must be understood to avoid unintentionally adding space during
+% expansion of these macros
 
-% Print TODO note.
-%
-% #1 text (no paragraph breaks)
-%
-\newcommand*{\TODO}[1]
-  {%
-    \ifdefined\color
-      {\color{red}[#1]}%
-    \else
-      {\emph{[#1]}}%
-    \fi
-  }
+% We could use the calc package to avoid using so many registers
+% \RequirePackage{calc}
+
+% Framed box in LR mode
+\newcommand\fmbox[1]{\fbox{\mbox{#1}}}
+
+% Framed box in paragraph mode
+\newlength\fparboxwidth
+\newcommand\fparbox[2][\linewidth]{%
+  \par
+  \noindent
+  \fbox{%
+    \setlength\fparboxwidth{#1}%
+    \addtolength\fparboxwidth{-2\fboxsep}%
+    \addtolength\fparboxwidth{-2\fboxrule}%
+    \parbox\fparboxwidth{#2}%
+  }%
+  \par
+}
+
+% Double framed box in paragraph mode
+\newcommand\ffparbox[2][\linewidth]{%
+  \par
+  \noindent
+  \fbox{%
+    \setlength\fparboxwidth{#1}%
+    \addtolength\fparboxwidth{-4\fboxsep}%
+    \addtolength\fparboxwidth{-4\fboxrule}%
+    \fbox{\parbox\fparboxwidth{#2}}%
+  }%
+  \par
+}
+
+% Framed box environment
+\newlength\fminipagewidth
+\newsavebox\savefminipage
+\newenvironment{fminipage}{%
+  \begin{lrbox}\savefminipage
+  \setlength\fminipagewidth\linewidth
+  \addtolength\fminipagewidth{-2\fboxsep}%
+  \addtolength\fminipagewidth{-2\fboxrule}%
+  \begin{minipage}\fminipagewidth
+}{%
+  \end{minipage}%
+  \end{lrbox}%
+  \par
+  \noindent
+  \fbox{\usebox\savefminipage}%
+  \par
+}
+
+% Framed note
+\newlength\notewidth
+\newsavebox\notesave
+\newcommand\note[2][note]{%
+  \fparbox{%
+    \sbox\notesave{\sffamily\bfseries\uppercase{#1}\ }%
+    \settowidth\notewidth{\usebox\notesave}%
+    \addtolength\fparboxwidth{-\notewidth}%
+    \usebox\notesave
+    \parbox[t]\fparboxwidth{#2}%
+  }%
+}
+
+% Framed "todo" note
+\newcommand\todo[1]{\note[todo]{#1}}
